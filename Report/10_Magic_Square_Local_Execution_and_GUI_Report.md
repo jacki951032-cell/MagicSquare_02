@@ -5,7 +5,7 @@
 - **문서 목적:** 개발자·학습자가 **로컬에서 저장소를 복제한 뒤** 가상환경·의존성·`pytest`·**PyQt6 GUI 창**을 **같은 절차**로 재현할 수 있게, 루트 [`README.md`](../README.md)의 **「실행·테스트」** 절을 Report에 **독립 수출**한다.
 - **대상 독자:** Windows / macOS / Linux에서 첫 온보딩하는 담당자, GUI만 먼저 띄우고 싶은 실습자, CI·에이전트 절차를 문서로 남기는 팀.
 - **작성일:** 2026-04-28
-- **버전:** 1.2
+- **버전:** 1.3
 
 | 항목 | 값 |
 |------|-----|
@@ -14,7 +14,7 @@
 | 동기화 원문 | [`../README.md`](../README.md) — **§실행·테스트** (환경·`pip`·`pytest`·`python -m magicsquare.gui`) |
 | 요구·검증 정본 | [`../docs/PRD_Magic_Square_4x4_TDD.md`](../docs/PRD_Magic_Square_4x4_TDD.md) §3, §7, §9 (도구·러너) |
 | 구현 참고 | [`../pyproject.toml`](../pyproject.toml) — `optional-dependencies.gui` = `PyQt6` |
-| Screen 모듈 | [`../src/magicsquare/gui/`](../src/magicsquare/gui/) — `grid_ui.py`, `__main__.py` |
+| Screen 모듈 | [`../src/magicsquare/gui/`](../src/magicsquare/gui/) — `grid_ui.py`, `window.py`, `__main__.py` |
 
 ---
 
@@ -108,10 +108,12 @@ python -m magicsquare.gui
 
 ### 5.2 동작 요약
 
-- [`QMainWindow`](https://doc.qt.io/qt-6/qmainwindow.html)에 [`GridUI`](../src/magicsquare/gui/grid_ui.py)를 올린 **MVP 창**이 열린다.
+- [`QMainWindow`](https://doc.qt.io/qt-6/qmainwindow.html)에 [`MagicSquareWindow`](../src/magicsquare/gui/window.py) (내부에 [`GridUI`](../src/magicsquare/gui/grid_ui.py))를 올린 **MVP 창**이 열린다.
 - 창 제목 예: `Magic Square 4×4 — Grid (MVP)`.
 - 시작 시 [`__main__.py`](../src/magicsquare/gui/__main__.py)에서 **데모 격자**(빈칸 두 칸 `0`, 나머지 칸에 1~14를 각각 한 번씩·**순차 행 나열이 아니라 격자 전체에 섞인 배치**)를 `set_matrix`로 한 번 넣는다. `GridUI` 자체는 셀을 0으로만 만들 뿐이어서, 진입점에서 안 넣으면 화면이 모두 0처럼 보였다.
-- 현재 MVP는 **4×4 숫자 스핀박스 격자**만 제공한다. **풀이 버튼·`solve` 연동·도메인 호출**은 PRD·To-Do에 따라 후속 과제에서 확장한다.
+- MVP는 **4×4 숫자 스핀박스 격자 + 「풀기」 버튼 + 결과 표시**를 제공한다.
+  - **정상 경로:** `GridUI.matrix()` → `magicsquare.boundary.validate()` → `magicsquare.magic_square.solve_magic_square()` → 6-튜플을 격자에 적용해 **0이 사라진 상태**로 화면에 반영한다.
+  - **실패 경로(UX 개선):** 입력이 검증에 실패하거나 solver가 지원하지 않아도, 팝업으로 이유를 알리고 **데모 정답(골든 완성 격자)**을 격자에 채워 보여준다(입력과 무관하게 “정답 제시” 모드).
 
 ### 5.3 종료
 
@@ -143,6 +145,7 @@ export QT_QPA_PLATFORM=offscreen   # Bash
 
 | 버전 | 일자 | 내용 |
 |------|------|------|
+| 1.3 | 2026-04-28 | §5.2 — 「풀기」/결과 표시/0 제거 반영 + 실패 시 데모 정답 제시(UX) |
 | 1.2 | 2026-04-28 | §5.2 — 데모 격자를 1~14 순차 배열이 아닌 섞인 배치로 시작 |
 | 1.1 | 2026-04-28 | §5.2 — GUI 시작 시 데모 격자 채움(`__main__`), 전부 0처럼 보이던 이유 설명 |
 | 1.0 | 2026-04-28 | 초판 — 로컬 환경·`pip`·`pytest`·`python -m magicsquare.gui`·헤드리스 참고 |
