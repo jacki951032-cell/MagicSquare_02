@@ -19,6 +19,9 @@
 | [`Report/06_Magic_Square_Layered_Design_TDD_Contracts_Report.md`](Report/06_Magic_Square_Layered_Design_TDD_Contracts_Report.md) | (있을 경우) 레이어·계약 설계 보강. |
 | [`docs/TODO_Cursor_Practicum_Magic_Square_4x4.md`](docs/TODO_Cursor_Practicum_Magic_Square_4x4.md) / [`docs/IMPLEMENTATION_TODO_Magic_Square_4x4.md`](docs/IMPLEMENTATION_TODO_Magic_Square_4x4.md) | **Task/Epic/Phase** 수준 **실습 보드**(PRD·Report와 정합). |
 | [`Report/07_Magic_Square_README_Repository_Guide_Report.md`](Report/07_Magic_Square_README_Repository_Guide_Report.md) | 본 `README`와 **동기**한 **Report 폴더 수출본**(온보딩·인쇄·배포). |
+| [`Report/08_Magic_Square_Git_Branch_PR_Workflow_Report.md`](Report/08_Magic_Square_Git_Branch_PR_Workflow_Report.md) | **`red`/green/refactor** 브랜치 의도·**PR을 열 때 diff가 없어진 사례**·GitHub **권장 워크플로**(저장소 운영). |
+| [`Report/09_Magic_Square_Dual_Track_RED_Test_Design_Report.md`](Report/09_Magic_Square_Dual_Track_RED_Test_Design_Report.md) | Dual-Track **RED** 테스트 설계(**UI-T·D-T** 시나리오·Invariant); 구현/GREEN/REFACTOR 범위 밖. |
+| [`docs/TEST_SPEC_Magic_Square_4x4.md`](docs/TEST_SPEC_Magic_Square_4x4.md) | 테스트 명세 — 프로젝트·환경·전제·성공·실패·특별 절차·TC 표(PR 정본 정렬). |
 
 *(Report/05 “문서 간 정렬”은 PRD 2절·4~6·8·User Journey·TC와 **동기**를 취한다.)*
 
@@ -207,4 +210,4 @@
 
 ---
 
-*이 README는 [`docs/PRD_Magic_Square_4x4_TDD.md`](docs/PRD_Magic_Square_4x4_TDD.md)를 **중심**으로, 스토리·ECB·TDD·문서 링크를 [`Report/`](Report/) **01~05**(및 06)에서 **참고**해 정리했으며, **법적/납기 판정은 PRD**가 우선한다.*
+*이 README는 [`docs/PRD_Magic_Square_4x4_TDD.md`](docs/PRD_Magic_Square_4x4_TDD.md)를 **중심**으로, 스토리·ECB·TDD·문서 링크를 [`Report/`](Report/) **01~09** 및 주요 **docs**에서 **참고**해 정리했으며, **법적/납기 판정은 PRD**가 우선한다.*
