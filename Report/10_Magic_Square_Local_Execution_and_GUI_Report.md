@@ -5,7 +5,7 @@
 - **문서 목적:** 개발자·학습자가 **로컬에서 저장소를 복제한 뒤** 가상환경·의존성·`pytest`·**PyQt6 GUI 창**을 **같은 절차**로 재현할 수 있게, 루트 [`README.md`](../README.md)의 **「실행·테스트」** 절을 Report에 **독립 수출**한다.
 - **대상 독자:** Windows / macOS / Linux에서 첫 온보딩하는 담당자, GUI만 먼저 띄우고 싶은 실습자, CI·에이전트 절차를 문서로 남기는 팀.
 - **작성일:** 2026-04-28
-- **버전:** 1.0
+- **버전:** 1.1
 
 | 항목 | 값 |
 |------|-----|
@@ -110,6 +110,7 @@ python -m magicsquare.gui
 
 - [`QMainWindow`](https://doc.qt.io/qt-6/qmainwindow.html)에 [`GridUI`](../src/magicsquare/gui/grid_ui.py)를 올린 **MVP 창**이 열린다.
 - 창 제목 예: `Magic Square 4×4 — Grid (MVP)`.
+- 시작 시 [`__main__.py`](../src/magicsquare/gui/__main__.py)에서 **데모 격자**(빈칸 두 칸 `0`, 나머지 1~14)를 `set_matrix`로 한 번 넣는다. `GridUI` 자체는 셀을 0으로만 만들 뿐이어서, 진입점에서 안 넣으면 화면이 모두 0처럼 보였다.
 - 현재 MVP는 **4×4 숫자 스핀박스 격자**만 제공한다. **풀이 버튼·`solve` 연동·도메인 호출**은 PRD·To-Do에 따라 후속 과제에서 확장한다.
 
 ### 5.3 종료
@@ -142,6 +143,7 @@ export QT_QPA_PLATFORM=offscreen   # Bash
 
 | 버전 | 일자 | 내용 |
 |------|------|------|
+| 1.1 | 2026-04-28 | §5.2 — GUI 시작 시 데모 격자 채움(`__main__`), 전부 0처럼 보이던 이유 설명 |
 | 1.0 | 2026-04-28 | 초판 — 로컬 환경·`pip`·`pytest`·`python -m magicsquare.gui`·헤드리스 참고 |
 
 ---
