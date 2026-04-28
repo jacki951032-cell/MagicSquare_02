@@ -2,17 +2,17 @@
 
 ## 개요
 
-- **문서 목적:** 루트 [`README.md`](../README.md)에 정리한 **프로젝트 진입·문서 지도·오류·계약·ECB·실행·TDD·To-Do**를 **Report 시리즈**에도 남겨, `Report/01`~`06`과 **같은 폴더**에서 열람·인쇄·배포할 수 있게 한다.
+- **문서 목적:** 루트 [`README.md`](../README.md)에 정리한 **프로젝트 진입·문서 지도·오류·계약·ECB·실행·TDD·To-Do**를 **Report 시리즈**에도 남겨, `Report/01`~`09`와 **같은 폴더**에서 열람·인쇄·배포할 수 있게 한다.
 - **대상 독자:** 구현·테스트·리뷰 담당자, TDD 학습자, 멘토, 온보딩.
 - **작성일:** 2026-04-28
-- **버전:** 1.1
+- **버전:** 1.3
 - **원문(동기화):** [`../README.md`](../README.md) — **§1.3 To-Do**·C2C·Epic/USER/TASK·트레이싱 표 = README와 **동기**(갱신 시 쌍으로 수정).
 | 항목 | 값 |
 |------|-----|
 | 문서 유형 | 내부 보고서(저장소 안내 / README 수출) |
 | 제품/프로젝트명 | Magic Square (4×4), 빈칸 2개 — TDD 연습 |
 | 근거(요구·검증 정본) | [`../docs/PRD_Magic_Square_4x4_TDD.md`](../docs/PRD_Magic_Square_4x4_TDD.md) |
-| 선행·참고 | `01`~`06` Report, `docs/TODO_*`, [`../README.md`](../README.md) §1.3 |
+| 선행·참고 | `01`~`09` Report, [`../docs/TEST_SPEC_Magic_Square_4x4.md`](../docs/TEST_SPEC_Magic_Square_4x4.md), `docs/TODO_*`, [`../README.md`](../README.md) §1.3 |
 
 ## 부록: 본 보고서(07)와 다른 Report와의 관계
 
@@ -20,6 +20,8 @@
 |--------|-------------------------|
 | `01`~`04`, `06` | README/07에서 **한 줄 설명**·스토리·ECB·TDD로 **참조** |
 | `05` | PRD **내부 보고**; `07`은 **진입·체크리스트**에 초점(동일 PRD 정본) |
+| `08` | Git·브랜치·PR 워크플로 — [`08_Magic_Square_Git_Branch_PR_Workflow_Report.md`](08_Magic_Square_Git_Branch_PR_Workflow_Report.md); `README`·`07` **문서 표와 동기** |
+| `09` | Dual-Track **RED** 테스트 설계(UI-T·D-T) — [`09_Magic_Square_Dual_Track_RED_Test_Design_Report.md`](09_Magic_Square_Dual_Track_RED_Test_Design_Report.md); `08`과 브랜치·작업 흐름 **참조** |
 | [`../README.md`](../README.md) | **동일 본문** 권장; 분기 시 PRD·AC를 기준으로 정합 점검 |
 
 ---
@@ -42,9 +44,12 @@
 | [`03_Magic_Square_CursorRules_Report.md`](03_Magic_Square_CursorRules_Report.md) | Cursor/에이전트 **품질·금지 룰·TDD 습관**(팀/개인 룰과 병기). |
 | [`04_Magic_Square_User_Journey_Traceability_Report.md`](04_Magic_Square_User_Journey_Traceability_Report.md) | **Epic → User Journey → User Story**·Gherkin·**입력검증 100% 계약**·성공 기준 요약. |
 | [`05_Magic_Square_PRD_Report.md`](05_Magic_Square_PRD_Report.md) | PRD의 **내부 보고서 본**; Report **01~04**와 **§정렬** 표(동기 권장). |
-| [`06_Magic_Square_Layered_Design_TDD_Contracts_Report.md`](06_Magic_Square_Layered_Design_TDD_Contracts_Report.md) | 레이어·계약 설계 보강. |
+| [`06_Magic_Square_Layered_Design_TDD_Contracts_Report.md`](06_Magic_Square_Layered_Design_TDD_Contracts_Report.md) | (있을 경우) 레이어·계약 설계 보강. |
 | [`../docs/TODO_Cursor_Practicum_Magic_Square_4x4.md`](../docs/TODO_Cursor_Practicum_Magic_Square_4x4.md) / [`../docs/IMPLEMENTATION_TODO_Magic_Square_4x4.md`](../docs/IMPLEMENTATION_TODO_Magic_Square_4x4.md) | **Task/Epic/Phase** 수준 **실습 보드**(PRD·Report와 정합). |
 | [`07_Magic_Square_README_Repository_Guide_Report.md`](07_Magic_Square_README_Repository_Guide_Report.md) (본 문서) | `README`와 **동기**한 **Report 폴더 수출본** — 온보딩·인쇄·C2C·§1.3 To-Do. |
+| [`08_Magic_Square_Git_Branch_PR_Workflow_Report.md`](08_Magic_Square_Git_Branch_PR_Workflow_Report.md) | **`red`/green/refactor** 브랜치 의도·**PR을 열 때 diff가 없어진 사례**·GitHub **권장 워크플로**(저장소 운영). |
+| [`09_Magic_Square_Dual_Track_RED_Test_Design_Report.md`](09_Magic_Square_Dual_Track_RED_Test_Design_Report.md) | Dual-Track **RED** 단계 — **UI-T·D-T** 시나리오·Invariant; 구현/GREEN/REFACTOR 범위 밖. |
+| [`../docs/TEST_SPEC_Magic_Square_4x4.md`](../docs/TEST_SPEC_Magic_Square_4x4.md) | 테스트 명세 — 프로젝트·환경·전제·성공·실패·특별 절차·TC 표(PR 정본 정렬). |
 
 *(Report/05 “문서 간 정렬”은 PRD 2절·4~6·8·User Journey·TC와 **동기**를 취한다.)*
 
@@ -233,7 +238,7 @@
 
 ---
 
-*이 보고서 본문은 [`../docs/PRD_Magic_Square_4x4_TDD.md`](../docs/PRD_Magic_Square_4x4_TDD.md)를 **중심**으로, 스토리·ECB·TDD·문서 링크·**§1.3 To-Do / C2C**를 `Report/01`~`06` 및 [`../README.md`](../README.md)와 **동기**하며, **법적/납기 판정은 PRD**가 우선한다.*
+*이 보고서 본문은 [`../docs/PRD_Magic_Square_4x4_TDD.md`](../docs/PRD_Magic_Square_4x4_TDD.md)를 **중심**으로, 스토리·ECB·TDD·문서 링크·**§1.3 To-Do / C2C**를 `Report/01`~`09` 및 주요 [`../docs/`](../docs/)와 [`../README.md`](../README.md)와 **동기**하며, **법적/납기 판정은 PRD**가 우선한다.*
 
 ---
 
@@ -243,3 +248,5 @@
 |------|------|------|
 | 1.0 | 2026-04-28 | README 내용의 Report 폴더 **수출** 초기본. |
 | 1.1 | 2026-04-28 | `README` **§1.3** — Epic/US/TASK·RGR·C2C 매트릭스·Checkpoint·sequence — 본문 **동기**; 문서 표에 07 self-row; 링크 `../docs/*`·Report/02 **상대 경로** 정리. |
+| 1.2 | 2026-04-28 | `README`와 문서 표 **동기**: Report `08`, [`TEST_SPEC`](../docs/TEST_SPEC_Magic_Square_4x4.md); 개요·선행·부록·말미 각주 **01~08**·docs 반영; Report `06` 설명 `(있을 경우)` 정렬. |
+| 1.3 | 2026-04-28 | Report `09` Dual-Track RED 설계 보고서; 부록·개요·선행·말미 **01~09** 반영. |
