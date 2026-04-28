@@ -19,6 +19,7 @@
 | [`Report/06_Magic_Square_Layered_Design_TDD_Contracts_Report.md`](Report/06_Magic_Square_Layered_Design_TDD_Contracts_Report.md) | (있을 경우) 레이어·계약 설계 보강. |
 | [`docs/TODO_Cursor_Practicum_Magic_Square_4x4.md`](docs/TODO_Cursor_Practicum_Magic_Square_4x4.md) / [`docs/IMPLEMENTATION_TODO_Magic_Square_4x4.md`](docs/IMPLEMENTATION_TODO_Magic_Square_4x4.md) | **Task/Epic/Phase** 수준 **실습 보드**(PRD·Report와 정합). |
 | [`Report/07_Magic_Square_README_Repository_Guide_Report.md`](Report/07_Magic_Square_README_Repository_Guide_Report.md) | 본 `README`와 **동기**한 **Report 폴더 수출본**(온보딩·인쇄·배포). |
+| [`Report/10_Magic_Square_Local_Execution_and_GUI_Report.md`](Report/10_Magic_Square_Local_Execution_and_GUI_Report.md) | **로컬 실행·`pytest`·GUI** (`python -m magicsquare.gui`) 절차를 Report에만 따로 정리한 보고서. |
 
 *(Report/05 “문서 간 정렬”은 PRD 2절·4~6·8·User Journey·TC와 **동기**를 취한다.)*
 
@@ -71,12 +72,80 @@
 
 ## 실행·테스트(근거: PRD §3, §7, §9)
 
-- **권장:** `pytest` (또는 팀이 **동일**하게 고정한 러너). 로컬·CI **동일** (PRD §3, §7.1).
+### 환경 준비
+
+| 항목 | 요구 |
+|------|------|
+| Python | **3.10 이상** (`python --version`) |
+| 저장소 루트 | 프로젝트 디렉터리에서 아래 명령 실행 (예: `MagicSquare_02`) |
+
+**(선택)** 가상환경으로 격리:
+
+```powershell
+# PowerShell (Windows)
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+```bash
+# Bash / macOS / Linux
+python -m venv .venv
+source .venv/bin/activate
+```
+
+### 패키지 설치
+
+테스트와 라이브러리만 필요할 때:
+
+```bash
+pip install -e .
+```
+
+**GUI(Window)** 를 띄우거나 `tests/ui/` 가 PyQt를 쓰려면 **`[gui]` extra**까지 설치합니다.
+
+```bash
+pip install -e ".[gui]"
+```
+
+설치 확인: `pip show PyQt6` 가 나오면 GUI 실행에 필요한 의존성이 들어간 상태입니다.
+
+### 단위·통합 테스트 (`pytest`)
+
+프로젝트 루트에서:
+
+```bash
+pytest
+```
+
+선택 실행 예:
+
+```bash
+pytest tests/domain -v
+pytest tests/boundary -v
+pytest tests/ui -v
+```
+
+PyQt를 설치하지 않았다면 **`tests/ui/test_ui_magic.py`** 한 건은 `pytest.importorskip` 으로 **자동 스킵**됩니다. UI 테스트까지 돌리려면 위의 `pip install -e ".[gui]"` 가 필요합니다.
+
+### GUI 프로그램 실행 (공식 진입점)
+
+패키지 모듈로 MVP 격자 창을 엽니다 (**PyQt6 필요**).
+
+```bash
+python -m magicsquare.gui
+```
+
+- 창 제목은 `Magic Square 4×4 — Grid (MVP)` 형태이며, 4×4 숫자 스핀박스 격자만 제공합니다 (풀이 버튼·연동은 추후 과제에서 확장 가능).
+- 실행이 끝나려면 연 창을 닫거나 터미널에서 프로세스를 종료하면 됩니다.
+
+**(참고)** 디스플레이가 없는 Linux CI 등에서는 `QT_QPA_PLATFORM=offscreen` 같은 설정이 필요할 수 있습니다. 로컬 데스크톱에서는 통상 불필요합니다.
+
+---
+
+- **권장:** 위와 같이 `pytest` 로컬·CI **동일** 러너 (PRD §3, §7.1).
 - (구현 후) **품질 게이트(예):** Domain 분기/라인 **≥95%**, Boundary **≥85%** (NFR-01) — `coverage` 등, CI optional.
 - **시나리오(납기 검증):** PRD **§9.1** `T-S-01`~`T-S-05` (정상 시도1/2, 해 없음, 입력 오류 4종, `pytest` 전부·(선택) 50ms).
 - **골든 격자·회귀:** **§9.3** 예 A(및 T-S-02/03 **전용 M**) — `Report/04` 출처와 **검산** 동기 권장(§9.2 삭제 금지).
-
-`src/` 아래 **실행/패키지**가 아직 없으면, **To-Do Phase 0**를 먼저 진행한다.
 
 ---
 

@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "magicsquare"
+version = "0.1.0"
+description = "Magic Square 4×4 TDD exercise"
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+gui = ["PyQt6>=6.5"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
