@@ -2,16 +2,17 @@
 
 ## 개요
 
-- **문서 목적:** 4×4 Magic Square(빈칸 2) TDD 연습 과제에 대한 **제품 요구사항**을 12절 구조로 정의하고, `Report/01`~`04` 및 합의된 입·출력 계약과 **정합**을 유지한다.
+- **문서 목적:** 4×4 Magic Square(빈칸 2) TDD 연습 과제에 대한 **제품 요구사항**을 **13절** 구조(Dual-Track + §7.1 MLOps 정렬 포함)로 정의하고, `Report/01`~`04` 및 합의된 입·출력 계약과 **정합**을 유지한다.
 - **대상 독자:** 구현·테스트·리뷰 담당자, TDD 학습자, 멘토.
 - **작성일:** 2026-04-28
-- **버전:** 2.0 (12절 구조)
+- **버전:** 2.1 (`docs/PRD_Magic_Square_4x4_TDD.md` v2.1과 동기, 13절: §1.1, §5.1, §7.1, §8.0, §13)
 - **원문(동기화):** `docs/PRD_Magic_Square_4x4_TDD.md` — 갱신 시 Report 본문과 **동기** 권장.
 
 | 항목 | 값 |
 |------|-----|
 | 문서 유형 | Product Requirements Document (PRD) / 내부 보고서 |
 | 제품/프로젝트명 | Magic Square (4×4), 빈칸 2개 |
+| PRD 절·버전 | 2.1 — §1.1 Dual-Track·MLOps, §5.1 어휘, §7.1 운영 품질(비-ML) |
 | 선행·참고 | `01` 문제 정의, `02` Dual-Track·계약, `03` Cursor 규칙, `04` 사용자 여정·추적성 |
 
 ## 부록: 문서 간 정렬
@@ -21,13 +22,19 @@
 | `01_Magic_Square_Problem_Definition_Report` | 2절(문제 정의), 계약·검증 동기 |
 | `02_Magic_Square_Dual_Track_TDD_Clean_Architecture_Report` | 4~6절·8절·`E_*`·컴포넌트·추적성 |
 | `03_Magic_Square_CursorRules_Report` | 7~8절 TDD/ECB·품질 게이트·금지 룰 |
-| `04_Magic_Square_User_Journey_Traceability_Report` | 3~5·9~12절 Journey·AC·Gherkin·TC |
+| `04_Magic_Square_User_Journey_Traceability_Report` | 3~5·9~13절 Journey·AC·Gherkin·TC·문서 이력 |
 
 ---
 
 ## 1. Executive Summary
 
 이 프로젝트는 4×4 격자에 빈칸(0) 2개와 1~16의 일부가 주어질 때, **고정된 입·출력 계약**과 **이중 시도(정배치·역배치) 규칙**에 따라 `int[6]` 해를 반환하거나, **정의된 오류 코드**로 실패를 보고하는 **순수 도메인** 중심 연습 과제다. 훈련이 지향하는 핵심 역량은 (1) **불변조건(Invariant)**을 한 곳에 모아 판정·검증하는 사고, (2) **경계(Boundary)와 도메인**을 나눈 **입·출력 계약**의 명시·테스트, (3) **Dual-Track TDD**로 RED–GREEN–REFACTOR를 경계/로직에 **병렬**로 적용하는 점이다. 알고리즘의 난이도·최적화는 목표에 포함되지 않는다.
+
+## 1.1 Dual-Track + MLOps (이 PRD/보고서에서의 뜻)
+
+- **UI 트랙** = **UX Contract / Boundary** 트랙이다. 웹·데스크톱 **화면**이 없을 수 있으며(§4.2), 그때는 **공개 API·`code`·`message`·성공 DTO**가 “**보이는(visible)** / **포함(includes)**” **결과**로 검증된다(§5.1).
+- **로직 트랙** = **Logic Rule / Domain** 트랙이다. BR·FR-02~05, FR-04 판정·이중 대입·`Allow`/`Reject`/`Return` 등 **의존성 없는 규칙**으로 RED를 만든다(§5.1, §6).
+- **MLOps(비-ML)** = 본 과제는 **학습/추론 모델**이 없다. 대신 **스펙(계약) 버전**·**Golden 픽스처(테스트 격자)**·**CI 품질 게이트**·**결정론·회귀 정책**을 한 세트로 관리하는 **운영 품질** 층으로 둔다(§7.1, §9.2, §9.3).
 
 ---
 
@@ -58,7 +65,7 @@
 
 ### 4.2 Out-of-Scope
 
-- **UI 화면** 개발(웹/데스크톱). 경계는 **Contract-first 테스트**·스키마 수준만 PRD에 포함(선택 이중 트랙).
+- **UI 화면(웹/데스크톱) 앱**을 “제품”으로 **완성**하는 것 — **기본 범위**에서는 **Out**. PRD/본 보고서의 “**UI**”(§8)는 **UX Contract = Boundary**를 뜻하며, `pytest`로 `code`·`message`·6-튜플을 검증해도 **Dual-Track**을 만족한다(§5.1). React 등 **시각 UI**는 **선택**; 도입 시 동일 `UI-T-*`·문구를 **화면 가시성**으로 옮기면 된다.
 - **DB** 저장/조회, 파일 영속(확장 시 별도 어댑터·별도 PRD).
 - **N×N 일반화**: 본 PRD **기본 범위는 4×4·상수 34**만. 일반화는 “확장 항목”으로만 언급 가능, 본 AC에 넣지 않는다.
 - **마방진 “생성”** 알고리즘(임의 n에 대해 마방진을 만드는 전체 생성 문제); 본 과제는 **2칸 대입 + 판정**으로 범위가 한정된다.
@@ -135,7 +142,8 @@
   - AC-04-1: 알려진 합=34인 완성 4×4(문서/테스트에 박은 예)는 true.  
   - AC-04-2: 임의 한 행 합을 34가 아닌 값이 되게 바꾼 격자는 false.  
   - AC-04-3: 열·주대각·부대각만 깨뜨린 **최소** 반례 각각 false.  
-- **오류/예외 정책**: 입력에 0이 있으면 본 PRD의 “완성 격자” 정의에 맞지 않으므로, 호출자는 FR-04에 **0 없는** 격자만 전달한다(위반 시 동작은 구현·계약 팀이 단일화; 최소 false 또는 사전조건 assert 중 하나).
+  - AC-04-4: 입력에 **0이 하나라도** 있으면(완성 격자가 아님) 팀이 **(가)** `false`를 반환하거나 **(나)** 사전조건 **위반(예: assert)으로 중단**하는 **한 가지**로 통일한다. 선택에 맞는 **단위 테스트 1건**이 스위트에 있어야 하며(§11), 혼용하지 않는다.  
+- **오류/예외 정책**: “완성 격자” **사전**조건(0 없음) — 위 AC-04-4, §11.
 
 ---
 
@@ -154,8 +162,36 @@
   - AC-05-2: FR-01 성공·시도1 true인 입력에 대해, 출력 6-튜플이 `[r1,c1,a,r2,c2,b]`(row-major에서 첫 셀에 `a` 등)이고, 완성 격자가 FR-04 true.  
   - AC-05-3: FR-01 성공·시도1 false·시도2 true인 입력에 대해, 출력이 `[r1,c1,b,r2,c2,a]`이고 완성 격자가 FR-04 true.  
   - AC-05-4: FR-01 성공·시도1·2 모두 false이면 `E_NO_VALID_ASSIGNMENT` (경계: `E_DOMAIN_FAILURE` + 위 `message`).  
-- **부작용**: **입력 `M`은 읽기 전용**; 해를 만들 때는 **사본**에 대입하거나, 호출자가 `M`이 변하지 않음을 자동화 테스트로 검증한다(7절 NFR-03).  
+- **부작용**: **입력 `M`은 읽기 전용**; 해를 만들 때는 **사본**에 대입하거나, 호출자가 `M`이 변하지 않음을 자동화 테스트로 검증한다(NFR-03).  
 - **오류/예외 정책**: 입력 오류 4종 + `E_NO_VALID_ASSIGNMENT` / `E_DOMAIN_FAILURE`; `message`는 결정론(동일 이유·동일 문자열).
+
+### 5.1 Dual-Track vocabulary & Domain vs Boundary errors
+
+팀·테스트·이슈/PR에서 **같은 말**로 말하도록, 슬라이드 수준 **동사**로만 **결정(Decision)**이 있는 항목을 TDD에 태운다(할 일 “정리”만의 작업은 테스트로 승격하지 않음).
+
+**① UX Contract (Track A, Boundary — 화면이 있으면 그걸, 없으면 DTO/문자열이 그 역할)**  
+
+| 권장 동사(영문) | 의미 | PRD/보고서에 대응하는 예 |
+|-----------------|------|--------------------------|
+| Visible / Not visible | 메시지·필드가 노출됨/아님 | `E_INPUT_SHAPE`일 때 `message`가 **정확히** FR-01 표와 일치(보임/다른 문구 **미포함**). |
+| Includes / Does not include | 본문에 부분문자열 포함 | `E_DOMAIN_FAILURE` + `message` **한 줄** = `failed to resolve...` **includes** 검사. |
+| Possible / Impossible (경로) | 해를 찾는 쪽 호출 가능 여부 | FR-01 실패 시 `DualAssignment` **impossible** — FR-05 미호출(스파이). |
+| Enabled / Disabled | (시각 UI 시) 제출/재시도 | 선택 UI 확장 시. |
+
+**② Logic Rule (Track B, Domain — 외부 I/O 없음)**  
+
+| 권장 동사(영문) | 의미 | PRD/보고서에 대응하는 예 |
+|-----------------|------|--------------------------|
+| Reject / Allow | 합=34·구조·대입 | `MagicSquareJudge` true/false, 입력 검사 실패. |
+| Return / Block | 해 또는 실패 | 성공 `int[6]`, `E_NO_VALID_ASSIGNMENT` 내부. |
+| Calculate / Maintain | 좌표·(a,b)·34 | FR-02~04, M 사본 `Maintain`(원본 NFR-03). |
+
+**③ 도메인 `code` vs 경계(사용자/응답) 표현**  
+
+| 내부(도메인) | 경계(멀리 보이는 쪽) | 메모 |
+|-------------|----------------------|------|
+| `E_NO_VALID_ASSIGNMENT` (시도1·2 모두 실패) | `E_DOMAIN_FAILURE` + `message` = `failed to resolve a valid magic-square assignment.` (FR-05) | **Presenter/Boundary**가 매핑; `UI-T-06`. |
+| FR-01 실패(4종) | 동일 `code`+표의 `message` (중간 `E_NO_VALID_…` 변환 **금지**) | AC-05-1, `UI-T-01`~`04`. |
 
 ---
 
@@ -186,13 +222,33 @@
 - **NFR-04(성능, 선택)**: 4×4 1건만의 해 탐지·검증은 **50ms** 이내(동일 머신, 테스트에서 상한 `timeout`로 측정); 초과 시 성능 이슈로 기록(기본 납은 통과).  
 - **NFR-05(관찰가능성)**: 구현이 `print`로 표준출력에 의존하지 않는다(학습 룰: `logging` 또는 검증 캡).
 
+### 7.1 MLOps로 읽는 운영 품질 (비-ML, 본 PRD의 범위)
+
+본 제품에 **학습/추론 모델**은 없다. 그래도 아래는 **MLOps와 같은 자리**에서 “**깨지지 않게**” 관리한다.
+
+- **스펙·스키마(artifact)**: `code`·`message`·6-튜플 형식은 **API/데이터 스키마**에 준한 **버전 대상**이다(§9.2, CHANGELOG).
+- **데이터(테스트)**: 9.3 **Golden 격자**·T-S-02/03 **전용 M**·Report/04 **출처** = **검산된 평가 세트**; 변경은 **PR + 검산 기록** 권장.
+- **CI 파이프라인**: `pytest` 전부 + (선택) 커버리지 게이트 NFR-01, (선택) 50ms T-S-05. **PR마다** 동일 러너(§3).
+- **재현성**: NFR-02(결정론); (선택) `uv.lock` / `poetry.lock` / `pip-tools` 등 **의존성 락**을 팀 표준에 두면 “동일 머신/이미지” **재빌드**가 쉬움(본 PRD는 툴을 **강제하지 않음**).
+- **감시·알람(경량)**: 통과하던 테스트가 **빨간색**이면 회귀; 9.2 “삭제 금지”와 연결(프로덕 **모델 모니터링**은 범위 밖).
+
 ---
 
 ## 8. Dual-Track TDD Strategy
 
-### 8.1 Track A — Boundary (UI) TDD
+**용어(§1.1, §5.1)**: “**UI**” = **UX Contract / Boundary**; **“Logic”** = **Domain**.
 
-- **Contract-first** 테스트 항목(예시 ID): `UI-T-01`~`UI-T-04` = FR-01·AC와 1:1(형태·0개수·범위·중복), `UI-T-05` = FR-01 통과+도메인 고정 `int[6]` 성공, `UI-T-06` = `E_NO_VALID_ASSIGNMENT`→`E_DOMAIN_FAILURE` 매핑, `UI-T-07` = 1-index 좌표.  
+### 8.0 Track A vs B (한 줄씩)
+
+| Track | 뭐로 RED? | 뭐로 GREEN/REF? |
+|-------|------------|------------------|
+| **A (Boundary / UX Contract)** | 설계/계약: `message`·`code`·6-튜플 DTO(또는 **화면**이 있으면 `queryByText` 류) | `UI-T-*`, **§5.1** 동사 **Includes/Visible/Impossible** |
+| **B (Domain / Logic Rule)** | 규칙: 34, 좌표, (a,b), 이중 대입 | `D-T-JDG`·`D-T-ASG`·BR, **Allow/Reject/Return** |
+
+### 8.1 Track A — Boundary (UX Contract / “UI”) TDD
+
+- **UI가 “픽셀”일 필요는 없다**(§4.2). `pytest`가 **최종 응답**의 `code`·`message`·6-튜플을 assert하면 **Track A**다. React 등을 쓰면 **동일** AC를 **Visible / not visible**로 번역(§5.1).
+- **Contract-first** 테스트 항목(예시 ID): `UI-T-01`~`UI-T-04` = FR-01·AC와 1:1(형태·0개수·범위·중복), `UI-T-05` = FR-01 통과+도메인 고정 `int[6]` 성공, `UI-T-06` = `E_NO_VALID_ASSIGNMENT`→`E_DOMAIN_FAILURE` 매핑(§5.1 표), `UI-T-07` = 1-index 좌표.  
 - **실패 정책**: 위 FR-01 표의 `code`·`message`; `E_DOMAIN_FAILURE`는 `failed to resolve a valid magic-square assignment.` **한 줄**이어야 한다.
 
 ### 8.2 Track B — Domain (Logic) TDD
@@ -202,8 +258,8 @@
 
 ### 8.3 병렬 진행 규칙
 
-- **UI RED** & **Logic RED** (동시에 실패하는 테스트 1개씩) → **UI GREEN** & **Logic GREEN** (각각 최소 통과) → **REFACTOR** (전체 스위트, 계약·경계 위반 없음).  
-- **도메인 전부를 먼저 구현한 뒤 경계만 뒤에 붙이는** 순서는 **금지**; 매 스프린트/과제 루프마다 **양 트랙**에 테스트가 **존재**한다(한쪽 0이면 REFACTOR 단계에서 누락).
+- **Boundary(UX) RED** & **Domain(Logic) RED** (동시에 실패하는 테스트 1개씩) → **Boundary GREEN** & **Domain GREEN** (각각 최소 통과) → **REFACTOR** (전체 스위트, 계약·경계 위반 없음, §7.1 CI).  
+- **도메인 전부를 먼저 구현한 뒤 경계만 뒤에 붙이는** 순서는 **금지**; 매 스프린트/과제 루프마다 **양 트랙**에 테스트가 **존재**한다(한쪽 0이면 REFACTOR 단계에서 **운영/품질 누락**과 동일(§7.1)).
 
 ---
 
@@ -263,7 +319,7 @@
 | 두 시도 모두 실패 | `E_NO_VALID_ASSIGNMENT` (경계 `E_DOMAIN_FAILURE`+고정 `message`); 6-원 **부재** |
 | 1-index vs 0-index | **출력 1-index**; 스캔 = row-major(행→열) |
 | 입력 `M` 변경 | NFR-03: **읽기 전용**; 테스트로 동일성 |
-| 0이 있는 `M`에 FR-04? | **호출 사전조건: 0 없음**; 위반은 구현팀 **한 가지**로 통일(사전 false 또는 assert) |
+| 0이 있는 `M`에 FR-04? | **AC-04-4**: `false` **또는** `assert` 중 **한 가지**; 혼용 금지, **단위 테스트 1건** |
 
 | 자주 흡수하는 실수 | 완화 |
 |--------------------|------|
@@ -275,15 +331,27 @@
 
 ## 12. Traceability Matrix (필수)
 
+**`INV-D-01`~`10` 전문**: PRD/본 보고서 **본문**에는 `INV-D-06`~`08` 등 **참조만** 둔다(§6~§12). **정의·문장 전체**는 `Report/02` 등 **동기 문서**와 **일치**시킬 것.
+
 | Concept/Invariant | Business Rule | Feature (FR) | Acceptance Criteria | Test Case | Component(논리) |
 |-------------------|---------------|--------------|---------------------|-----------|-----------------|
 | INV-D-06~08 (입력 구조) | BR-01~04 | FR-01 | AC-01-1~4 | D-T-VAL, UI-T-01~04 | `InputMatrixValidator` |
 | INV-D-06+첫/둘 0 (순서) | BR-04 | FR-02 | AC-02-1,2 | 단위(고정 M) | `BlankCellLocator` |
 | 누락 집합 | BR-05,06 | FR-03 | AC-03-1,2 | 단위 | `MissingNumberFinder` |
-| INV-D-01~05 (34) | BR-07 | FR-04 | AC-04-1~3 | D-T-JDG-01~05 | `MagicSquareJudge` |
+| INV-D-01~05 (34) | BR-07 | FR-04 | AC-04-1~4 | D-T-JDG-01~05, AC-04-4 | `MagicSquareJudge` |
 | INV-D-09~10 (6-튜플) | BR-08,09 | FR-05 | AC-05-1~4 | D-T-ASG, UI-T-05~07, INT | `DualAssignmentResolver` |
-| 해 없음 (일관) | BR-10 | FR-05 | AC-05-4 | D-T-ASG-03, INT-T-05 | `DualAssignmentResolver`+ 경계 |
-| `message` 결정 | — | FR-01, FR-05 | 5절+11절 | UI-T Contract | Boundary Presenter |
+| 해 없음 (일관) | BR-10 | FR-05 | AC-05-4 | D-T-ASG-03, INT-T-05, §5.1 | `DualAssignmentResolver`+ 경계 |
+| `message` / 도메인→경계 | — | FR-01, FR-05, §5.1 | 5.1, 5절, 11절 | UI-T / Contract | Boundary Presenter |
+| CI·회귀·Golden 데이터 | NFR-01,02, §7.1 | §9.2, §9.3 | 9.2, T-S-05 | CI job, 9.3 | (인프라/레포) |
+
+---
+
+## 13. Document change log (문서, PRD 동기)
+
+| 버전 | 날짜 | 요약 |
+|------|------|------|
+| 2.0 | 2026-04-28 | 12절 PRD(초기) — Report 05 v2.0. |
+| 2.1 | 2026-04-28 | `docs/PRD_Magic_Square_4x4_TDD.md`와 동기: **§1.1** Dual-Track+MLOps, **§4.2** UI=Boundary, **§5.1** UX/Logic 어휘·도메인/경계 오류, **AC-04-4**, **§7.1** 비-ML MLOps, **§8.0~8.1** Boundary(UX), **§12**·**§13** — Report 본문 반영. |
 
 ---
 
@@ -291,4 +359,4 @@
 
 ---
 
-*본 Report는 05번(제품 요구사항)이며, 문서 끝이다.*
+*본 Report는 05번(제품 요구사항)이며, PRD v2.1(13절)과 동기화한 문서 끝이다.*
