@@ -8,12 +8,12 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
 
 from magicsquare.gui.grid_ui import GridUI
 
-# UX-only starter puzzle: two blanks (0) + distinct 1..14 elsewhere — same shape as UI smoke test.
+# UX-only: two 0-cells + 1..14 each once, spread non-sequentially (not row-major 1,2,3,…).
 _DEMO_MATRIX: list[list[int]] = [
-    [0, 0, 1, 2],
-    [3, 4, 5, 6],
-    [7, 8, 9, 10],
-    [11, 12, 13, 14],
+    [11, 3, 0, 7],
+    [2, 14, 9, 0],
+    [13, 5, 6, 12],
+    [8, 1, 4, 10],
 ]
 
 
