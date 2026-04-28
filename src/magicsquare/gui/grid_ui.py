@@ -36,3 +36,7 @@ class GridUI(QWidget):
             [self._cells[r][c].value() for c in range(MATRIX_SIZE)]
             for r in range(MATRIX_SIZE)
         ]
+
+    def set_cell_1idx(self, row: int, col: int, value: int) -> None:
+        """Set a single cell using 1-indexed coordinates (UI contract)."""
+        self._cells[row - 1][col - 1].setValue(value)

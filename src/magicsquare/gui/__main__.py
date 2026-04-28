@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import sys
 
-from PyQt6.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QApplication, QMainWindow
 
-from magicsquare.gui.grid_ui import GridUI
+from magicsquare.gui.window import MagicSquareWindow
 
 # UX-only: two 0-cells + 1..14 each once, spread non-sequentially (not row-major 1,2,3,…).
 _DEMO_MATRIX: list[list[int]] = [
@@ -21,12 +21,9 @@ def main() -> None:
     app = QApplication(sys.argv)
     window = QMainWindow()
     window.setWindowTitle("Magic Square 4×4 — Grid (MVP)")
-    central = QWidget()
+    central = MagicSquareWindow()
+    central.grid().set_matrix(_DEMO_MATRIX)
     window.setCentralWidget(central)
-    layout = QVBoxLayout(central)
-    grid = GridUI()
-    grid.set_matrix(_DEMO_MATRIX)
-    layout.addWidget(grid)
     window.resize(320, 280)
     window.show()
     raise SystemExit(app.exec())
