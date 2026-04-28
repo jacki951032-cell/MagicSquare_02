@@ -18,6 +18,19 @@ _GOLDEN_A: Final[Matrix] = [
 # AC-05-3: [r1,c1,b,r2,c2,a]
 _GOLDEN_A_TUPLE: Final[list[int]] = [3, 3, 6, 4, 4, 1]
 
+# Golden A solved (after applying _GOLDEN_A_TUPLE): no zeros remain.
+_GOLDEN_A_SOLVED: Final[Matrix] = [
+    [16, 2, 3, 13],
+    [5, 11, 10, 8],
+    [9, 7, 6, 12],
+    [4, 14, 15, 1],
+]
+
+
+def demo_solution() -> tuple[Matrix, list[int]]:
+    """Return (solved_matrix, answer_tuple) for the built-in demo (hardcoded)."""
+    return ([row[:] for row in _GOLDEN_A_SOLVED], list(_GOLDEN_A_TUPLE))
+
 
 def solve_magic_square(matrix: Matrix) -> list[int]:
     """유효 격자에 대한 6-원 배치. 현재는 §9.3 예 A만 지원(나머지는 ``ValueError``)."""
