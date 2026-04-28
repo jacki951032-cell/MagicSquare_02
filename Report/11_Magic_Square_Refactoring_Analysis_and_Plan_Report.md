@@ -5,7 +5,7 @@
 - **문서 목적:** `Domain/Boundary/GUI(Screen)` 3개 축에서 **테스트 현황**, **코드 스멜**, **ECB/SRP 관점**을 정리하고, **테스트 선행 기반 리팩토링 계획**을 제시한다.
 - **대상 독자:** 리팩토링 착수 전(특히 `refactoring` 브랜치) 안전장치를 마련하려는 구현자/리뷰어.
 - **작성일:** 2026-04-28
-- **버전:** 1.0
+- **버전:** 1.1
 
 | 항목 | 값 |
 |------|-----|
@@ -50,7 +50,7 @@
 
 | 파일명 | 줄번호 | 스멜 종류 | 문제 설명 | 우선순위 |
 |---|---:|---|---|---|
-| `src/magicsquare/boundary.py` | 6-20 | 중복 코드 | shape 불일치 시 같은 메시지 생성/raise 로직이 2곳(행 수/열 수 체크)에서 반복되어 변경 시 누락 위험 | 중 |
+| `src/magicsquare/boundary.py` | 6-24 | 중복 코드 | shape 불일치 시 같은 메시지 생성/raise 로직이 2곳(행 수/열 수 체크)에서 반복되어 변경 시 누락 위험 *(→ §6.1에서 1차 해소)* | 중 |
 | `src/magicsquare/gui/window.py` | 44-67 | 긴 함수(20줄 초과) | `_on_solve_clicked`가 입력 수집→검증→솔버 호출→예외 UX→grid 반영→결과 표시까지 수행(책임 과다, 수정 위험) | 상 |
 | `src/magicsquare/gui/window.py` | 49-66 | 이해하기 힘든 이름 | `answer`가 “정답 6-튜플/데모 정답”으로 의미가 상황에 따라 달라져 추론 비용 증가 | 중 |
 | `src/magicsquare/gui/window.py` | 50, 60-63 | 불필요한 변수/흐름 | `solved_matrix=None`을 두고 분기하는 흐름이 복잡도를 올림(성공 케이스에서 실질적으로 항상 `None`) | 중 |
@@ -90,7 +90,7 @@
 
 ## 4. SRP(단일 책임 원칙) 관점 위반(요약, 문제 항목만)
 
-- `src/magicsquare/boundary.py:6-20`
+- `src/magicsquare/boundary.py:6-21`
   - `validate()`가 **shape 검증**과 **zero count 검증**을 동시에 수행(2가지 책임).
 
 - `src/magicsquare/gui/window.py:44-66`
@@ -149,8 +149,37 @@ pytest -q tests/ui
 | 버전 | 일자 | 내용 |
 |------|------|------|
 | 1.0 | 2026-04-28 | Domain/Boundary/GUI 분석 요약 + 테스트 선행 기반 리팩토링 계획서 초판 |
+| 1.1 | 2026-04-28 | §6.1 추가 — Dual-Track “커밋 1개” REFACTOR 실행 기록(기준선 GREEN → 리팩토링 → 재GREEN → push) |
 
 ---
 
 *본 보고서는 리팩토링 착수 전 “안전장치(테스트)” 확보를 우선한다. 제품 요구·승인 기준은 [`../docs/PRD_Magic_Square_4x4_TDD.md`](../docs/PRD_Magic_Square_4x4_TDD.md)가 우선한다.*
+
+---
+
+## 6.1 실행 완료: 커밋 1개 단위 Dual-Track REFACTOR 기록 (Boundary)
+
+본 절은 “계약/동작 변화 없이” 수행한 **단일 커밋 리팩토링**의 실행 로그를 요약한다.
+
+### 목표(선택 ID)
+
+- UI Track 후보 중 **R-U2(예외 메시지/코드 상수화·단일화)**를 최소 단위로 적용
+  - 변경 범위가 작고(1파일), 중복 제거 효과가 즉시 확인 가능하며, 도메인(Logic Track) 침투가 없다.
+
+### REFRACTOR SAFETY 절차(요약)
+
+- **Step 0 기준선 확인:** `pytest -q` → `9 passed`
+- **Step 3 리팩토링(최소 변경):** `src/magicsquare/boundary.py`
+  - shape/zero-count 검증을 내부 헬퍼로 분리하고, 에러 메시지를 상수로 단일화
+  - 외부 계약(입력/출력/예외 타입/메시지/포맷)은 변경하지 않음
+- **Step 4 회귀 확인:** `pytest -q` → `9 passed`
+
+### 산출물(커밋/푸시)
+
+- **Commit:** `refactor(boundary): extract shape/zero-count validators` (hash: `1fe2590`)
+- **Remote:** `origin/refactoring`으로 push 완료
+
+### 비고
+
+- `Prompt/` 아래의 exported prompt 문서는 작업 기록 성격으로, 원격 업로드(커밋)에는 포함하지 않았다.
 
